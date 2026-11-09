@@ -8,6 +8,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  db.ready.then(() => next()).catch(next);
+});
+
 // Get all recipes
 app.get('/api/recipes', (req, res) => {
   db.all("SELECT * FROM recipes ORDER BY created_at DESC", (err, rows) => {
